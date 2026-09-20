@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "bhoomika98/ecommerce-app"
+        IMAGE_TAG = "build-${BUILD_NUMBER}"
+    }
+
     stages {
 
         stage('Checkout') {
@@ -46,7 +51,7 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t bhoomika98/ecommerce-app:jenkins ./app'
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ./app'
             }
         }
 
@@ -59,11 +64,21 @@ pipeline {
                 )]) {
                     sh '''
                         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-                        docker push bhoomika98/ecommerce-app:jenkins
+                        docker push ${IMAGE_NAME}:${IMAGE_TAG}
                         docker logout
                     '''
                 }
             }
+         stage('Deploy to Kubernetes') {
+             steps {
+               sh '''
+                 kubectl --kubeconfig=/var/lib/jenkins/.kube/config \
+                 set image deployment/ecommerce-app \
+                 ecommerce-app=${IMAGE_NAME}:${IMAGE_TAG}
+              '''
+              }
+           }   
+
         }
     }
 }
