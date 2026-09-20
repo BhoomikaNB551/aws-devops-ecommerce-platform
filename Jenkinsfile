@@ -24,5 +24,10 @@ pipeline {
                 }
             }
         }
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t ecommerce-app:jenkins ./app'
+            }
+        }
     }
 }
