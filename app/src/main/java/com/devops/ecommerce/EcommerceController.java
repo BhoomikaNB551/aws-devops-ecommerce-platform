@@ -8,7 +8,7 @@ public class EcommerceController {
 
     @GetMapping("/")
     public String home() {
-        return "AWS DevOps E-Commerce Application is Running!";
+        return "AWS DevOps E-Commerce Application v1 is Running!";
     }
 
     @GetMapping("/health")
