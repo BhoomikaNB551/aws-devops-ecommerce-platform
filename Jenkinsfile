@@ -35,19 +35,20 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
                         dir('app') {
-                       sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=aws-devops-ecommerce-platform -Dsonar.token=$SONAR_TOKEN'                        }
+                            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=aws-devops-ecommerce-platform -Dsonar.token=$SONAR_TOKEN'
+                        }
                     }
                 }
             }
         }
 
         stage('Quality Gate') {
-          steps {
-           timeout(time: 5, unit: 'MINUTES') {
-            waitForQualityGate abortPipeline: true
-          }
-      }
-  }
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
 
         stage('Docker Build') {
             steps {
@@ -69,16 +70,16 @@ pipeline {
                     '''
                 }
             }
-         stage('Deploy to Kubernetes') {
-             steps {
-               sh '''
-                 kubectl --kubeconfig=/var/lib/jenkins/.kube/config \
-                 set image deployment/ecommerce-app \
-                 ecommerce-app=${IMAGE_NAME}:${IMAGE_TAG}
-              '''
-              }
-           }   
+        }
 
+        stage('Deploy to Kubernetes') {
+            steps {
+                sh '''
+                    kubectl --kubeconfig=/var/lib/jenkins/.kube/config \
+                    set image deployment/ecommerce-app \
+                    ecommerce-app=${IMAGE_NAME}:${IMAGE_TAG}
+                '''
+            }
         }
     }
 }
