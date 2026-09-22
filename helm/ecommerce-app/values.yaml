@@ -159,3 +159,7 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+serviceMonitor:
+  enabled: true
+  path: /actuator/prometheus
+  interval: 15s

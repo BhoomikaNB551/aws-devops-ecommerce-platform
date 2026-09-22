@@ -72,14 +72,15 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
+        stage('Deploy to Kubernetes with Helm') {
             steps {
-                sh '''
-                    kubectl --kubeconfig=/var/lib/jenkins/.kube/config \
-                    set image deployment/ecommerce-app \
-                    ecommerce-app=${IMAGE_NAME}:${IMAGE_TAG}
-                '''
-            }
+               sh '''
+               helm upgrade --install ecommerce-app ./helm/ecommerce-app \
+               --kubeconfig /var/lib/jenkins/.kube/config \
+               --set image.tag=${IMAGE_TAG} \
+               --wait
+               '''
+             }
         }
     }
 }
