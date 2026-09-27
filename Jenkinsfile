@@ -78,7 +78,8 @@ pipeline {
                helm upgrade --install ecommerce-app ./helm/ecommerce-app \
                --kubeconfig /var/lib/jenkins/.kube/config \
                --set image.tag=${IMAGE_TAG} \
-               --wait
+               --wait \
+               --timeout 5m
                '''
              }
         }
