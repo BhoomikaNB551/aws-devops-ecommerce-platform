@@ -35,7 +35,7 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_TOKEN')]) {
                         dir('app') {
-                            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=aws-devops-ecommerce-platform -Dsonar.token=$SONAR_TOKEN'
+                            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=AWS-DevOps-E-Commerce-Platform -Dsonar.token=$SONAR_TOKEN'
                         }
                     }
                 }
